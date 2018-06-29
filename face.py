@@ -36,9 +36,8 @@ def get_landmarks(mat):
 
 def draw_landmarks(mat, faces):
     for (f, face) in enumerate(faces):
-        print(faces[f])
         for (x, y) in faces[f].get('landmarks'):
-            cv.circle(mat, (x, y), 2, (0, 0, 255), -1)
+            cv.circle(mat, (x, y), 3, (0, 0, 255), -1)
 
 
 def triangulate(mat, face):
@@ -58,12 +57,19 @@ def triangulate(mat, face):
         p3 = (t[4], t[5])
 
         if point_in_rect(rect, p1) and point_in_rect(rect, p2) and point_in_rect(rect, p3):
-            # cv.line(mat, p1, p2, (0, 255, 0), 1, 0)
-            # cv.line(mat, p2, p3, (0, 255, 0), 1, 0)
-            # cv.line(mat, p3, p1, (0, 255, 0), 1, 0)
             points.append(np.array([p1, p2, p3]))
 
     return points
+
+
+def draw_triangles(mat, points):
+    for (p1, p2, p3) in points:
+        x1, y1 = p1
+        x2, y2 = p2
+        x3, y3 = p3
+        cv.line(mat, (x1, y1), (x2, y2), (0, 255, 0), 1, 0)
+        cv.line(mat, (x2, y2), (x3, y3), (0, 255, 0), 1, 0)
+        cv.line(mat, (x3, y3), (x1, y1), (0, 255, 0), 1, 0)
 
 
 def transform_image(mat1, mat2, t1, t2, out):
@@ -111,8 +117,6 @@ def transform_triangle(mat, t1, t2, out):
     # print('out')
     # print(out[r2[1]:r2[1] + r2[3], r2[0]:r2[0] + r2[2]])
 
-    cv.imshow('image', out)
-    cv.waitKey(0) & 0xFF
     return
 
 
